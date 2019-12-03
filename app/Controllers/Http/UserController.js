@@ -1,12 +1,21 @@
 'use strict'
 
-const UserService = use("App/Services/UserService");
-
 class UserController {
+
+  static get inject() {
+    return [
+      'App/Services/UserService',
+    ]
+  }
+
+  constructor(userService) {
+    this.userService = userService;
+  }
+
   async create({ request }) {
     const data = request.only(["username", "email", "password"])
 
-    const user = await UserService.create(data)
+    const user = await this.userService.create(data)
 
     return user
   }
