@@ -13,12 +13,12 @@ class UserController {
   }
 
   async create({ request }) {
-    const data = request.only(["username", "email", "password"])
+    const data = request.only(["username", "email", "password"]);
 
-    const user = await this.userService.create(data)
+    const user = await this.userService.create(data);
 
-    return user
+    return user;
   }
 }
 
-module.exports = UserController
+module.exports = UserController;
