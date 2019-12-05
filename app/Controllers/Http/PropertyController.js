@@ -28,8 +28,10 @@ class PropertyController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index() {
-    const properties = this.propertyService.all()
+  async index({ request }) {
+    const { latitude, longitude } = request.all()
+
+    const properties = await this.propertyService.all(latitude, longitude);
 
     return properties
   }
@@ -42,7 +44,19 @@ class PropertyController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+  async store({ request, auth }) {
+    const { id } = auth.user
+    const data = request.only([
+      'title',
+      'address',
+      'latitude',
+      'longitude',
+      'price'
+    ])
+
+    const property = await this.propertyService.create({ ...data, user_id: id })
+
+    return property
   }
 
   /**
@@ -68,7 +82,19 @@ class PropertyController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {
+  async update({ params, request }) {
+
+    const data = request.only([
+      'title',
+      'address',
+      'latitude',
+      'longitude',
+      'price'
+    ])
+
+    const property = await this.propertyService.update(params.id, data)
+
+    return property
   }
 
   /**

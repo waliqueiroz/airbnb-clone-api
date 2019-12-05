@@ -3,9 +3,11 @@
 const Property = use("App/Models/Property");
 
 class PropertyService {
-  async all() {
+  async all(latitude, longitude) {
 
-    const properties = await Property.all();
+    const properties = await Property.query()
+      .nearBy(latitude, longitude, 10)
+      .fetch()
 
     return properties;
   }
@@ -14,6 +16,22 @@ class PropertyService {
     const property = await Property.findOrFail(id)
 
     await property.load('images')
+
+    return property
+  }
+
+  async create(data) {
+    const property = await Property.create(data)
+
+    return property
+  }
+
+  async update(id, data) {
+    const property = await Property.findOrFail(id)
+
+    property.merge(data)
+
+    await property.save()
 
     return property
   }
