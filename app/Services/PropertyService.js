@@ -5,7 +5,7 @@ const Property = use("App/Models/Property");
 class PropertyService {
   async all(latitude, longitude) {
 
-    const properties = await Property.query()
+    const properties = await Property.query().with('images')
       .nearBy(latitude, longitude, 10)
       .fetch()
 
